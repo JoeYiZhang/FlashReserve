@@ -14,4 +14,8 @@ public final class MessageConstants {
     public static final String DUP_USER = "已经存在该用户名，请直接登录";
     //注册用户发生错误
     public static final String REGISTER_ERR = "注册新用户失败";
+    //参数不合法
+    public static final String ARGS_ERR = "参数不合法";
+    //服务器异常
+    public static final String SERVER_ERR = "服务器异常";
 }

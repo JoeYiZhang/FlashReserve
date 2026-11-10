@@ -3,6 +3,7 @@ package org.zuyi.flashreserve.Interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.zuyi.flashreserve.common.constants.RedisConstants;
+import org.zuyi.flashreserve.common.exception.AuthorizeException;
 import org.zuyi.flashreserve.common.utils.AuthHeaderUtils;
 import org.zuyi.flashreserve.common.utils.TokenUtils;
 import org.zuyi.flashreserve.common.utils.UserContent;
@@ -27,15 +28,13 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         String token = AuthHeaderUtils.getToken(request);
         if(token == null){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
+            throw new AuthorizeException("未携带token");
         }
 
         String hashToken = TokenUtils.hashToken(token);
         String idStr = stringRedisTemplate.opsForValue().get(RedisConstants.LOGIN_KEY + hashToken);
         if(idStr == null){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
+            throw new AuthorizeException("未找到该用户");
         }
 
         stringRedisTemplate.expire(RedisConstants.LOGIN_KEY + token, 30, TimeUnit.MINUTES);
@@ -43,8 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             Long userId = Long.valueOf(idStr);
             UserContent.setUserId(userId);
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
+            throw new AuthorizeException(e.getMessage());
         }
         return true;
     }

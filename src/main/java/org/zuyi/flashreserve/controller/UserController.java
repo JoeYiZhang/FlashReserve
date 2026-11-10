@@ -2,6 +2,7 @@ package org.zuyi.flashreserve.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.zuyi.flashreserve.common.DTO.LoginDTO;
 import org.zuyi.flashreserve.common.result.Result;
@@ -34,7 +35,7 @@ public class UserController {
      */
     @PostMapping("/login")
     @Operation(tags = "用户登陆")
-    public Result login(@RequestBody LoginDTO loginDTO) {
+    public Result login(@Valid @RequestBody LoginDTO loginDTO) {
         log.info("用户登陆:{}",loginDTO);
         Result result = userService.login(loginDTO);
         return result;
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Result register(@RequestBody LoginDTO loginDTO) {
+    public Result register(@Valid @RequestBody LoginDTO loginDTO) {
 
         log.info("注册用户:");
         Result result = userService.register(loginDTO);

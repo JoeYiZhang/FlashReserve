@@ -1,8 +1,10 @@
 package org.zuyi.flashreserve.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.zuyi.flashreserve.VO.LoginVO;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import org.zuyi.flashreserve.common.DTO.LoginDTO;
@@ -10,6 +12,7 @@ import org.zuyi.flashreserve.common.constants.CodeConstants;
 import org.zuyi.flashreserve.common.constants.MessageConstants;
 import org.zuyi.flashreserve.common.constants.RedisConstants;
 import org.zuyi.flashreserve.common.entity.User;
+import org.zuyi.flashreserve.common.exception.BussinessException;
 import org.zuyi.flashreserve.common.result.Result;
 import org.zuyi.flashreserve.common.utils.AuthHeaderUtils;
 import org.zuyi.flashreserve.common.utils.TokenUtils;
@@ -43,19 +46,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
         if(username == null || password == null){
-            return Result.fail(CodeConstants.FAIL,MessageConstants.LOGIN_BLANK);
+           throw new BussinessException(CodeConstants.LOGIN_BLANK,MessageConstants.LOGIN_BLANK);
         }
         User user = query().eq("user_name", username).one();
         if(user == null){
-            return Result.fail(CodeConstants.FAIL,MessageConstants.LOGIN_FAIL);
+            throw new  BussinessException(CodeConstants.FAIL,MessageConstants.LOGIN_FAIL);
         }
 
         if(!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())){
-            return Result.fail(CodeConstants.FAIL,MessageConstants.LOGIN_FAIL);
+            throw new  BussinessException(CodeConstants.FAIL,MessageConstants.LOGIN_FAIL);
         }
         //检查账号状态
         if(user.getStatus().equals(0)){
-            return Result.fail(CodeConstants.FAIL,MessageConstants.USER_STATUS_ERR);
+            throw new  BussinessException(CodeConstants.FAIL,MessageConstants.USER_STATUS_ERR);
         }
 
         //存入redis中
@@ -81,7 +84,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         Boolean success = stringRedisTemplate.delete(RedisConstants.LOGIN_KEY + hashToken);
         if(BooleanUtils.isFalse(success)){
             log.info("token:",token);
-            return Result.fail(CodeConstants.FAIL,"token有问题");
+            throw new  BussinessException(CodeConstants.FAIL,"token有问题");
         }
         UserContent.removeUser();
         return Result.success();
@@ -94,7 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
         User user = query().eq("user_name", username).one();
         if(user != null){
-           return Result.fail(CodeConstants.LOGIN_DUP_REGESTER,MessageConstants.DUP_USER);
+            throw new  BussinessException(CodeConstants.LOGIN_DUP_REGESTER,MessageConstants.DUP_USER);
         }
 
         user = new User();
@@ -104,11 +107,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         user.setUserName(username);
-        user.setNickName(LocalDateTime.now().toString());
+        user.setNickName(RandomUtil.randomString(10));
 
         boolean save = save(user);
         if(BooleanUtils.isFalse(save)){
-            return Result.fail(CodeConstants.REGESTER_ERR,MessageConstants.REGISTER_ERR);
+            throw new  BussinessException(CodeConstants.REGESTER_ERR,MessageConstants.REGISTER_ERR);
         }
         return Result.success();
     }
