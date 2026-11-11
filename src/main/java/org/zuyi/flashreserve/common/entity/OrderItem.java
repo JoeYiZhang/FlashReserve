@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("reservation_order_item")
-public class ReservationOrderItem {
+@TableName("order_item")
+public class OrderItem {
 
     @TableId(type = IdType.AUTO)
     private Long id;

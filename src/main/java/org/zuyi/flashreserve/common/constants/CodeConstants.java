@@ -9,5 +9,13 @@ public class CodeConstants {
     public static final Integer ARGS_ERR = 10001;
     public static final Integer SERVER_ERR = 50000;
     public static final Integer LOGIN_BLANK = 40003;
+    public static final Integer ACTIVITY_BLANK = 40004;
+    public static final Integer ACTIVITY_DUP = 40005;
+    public static final Integer ACTIVITY_SAVE_ERR = 40006;
+    public static final Integer SESSION_ERR = 40007;
+    public static final Integer SESSION_CODE = 40008;
+    public static final Integer TICKET_ERR = 40009;
+    public static final Integer ACTIVITY_ERR = 40010;
+
 
 }

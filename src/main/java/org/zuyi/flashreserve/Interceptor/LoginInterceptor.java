@@ -37,7 +37,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             throw new AuthorizeException("未找到该用户");
         }
 
-        stringRedisTemplate.expire(RedisConstants.LOGIN_KEY + token, 30, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(RedisConstants.LOGIN_KEY + hashToken, 30, TimeUnit.MINUTES);
         try {
             Long userId = Long.valueOf(idStr);
             UserContent.setUserId(userId);
