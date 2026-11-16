@@ -52,4 +52,14 @@ public final class MessageConstants {
     public static final String PERMISSION_DENYED = "你没有查看该内容的权限";
     //场次保存错误
     public static final String SESSION_SAVE_ERR = "场次保存错误";
+    //库存不足
+    public static final String STOCK_ERR = "库存不足";
+    //已经达到购买上限
+    public static final String SECKILL_LIMIT = "已经达到购买上线";
+    //订单重复
+    public static final String ORDER_DUP = "重复订单";
+    //订单保存出错
+    public static final String ORDER_SAVE_ERR  = "订单保存出错";
+    //订单明细保存出错
+    public static final String ORDERITEM_SAVE_ERR = "订单明细保存出错";
 }

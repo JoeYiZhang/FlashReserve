@@ -1,5 +1,7 @@
 package org.zuyi.flashreserve.common.constants;
 
+import java.security.PublicKey;
+
 public class CodeConstants {
 
     public static final Integer SUCCESS = 200;
@@ -16,6 +18,9 @@ public class CodeConstants {
     public static final Integer SESSION_CODE = 40008;
     public static final Integer TICKET_ERR = 40009;
     public static final Integer ACTIVITY_ERR = 40010;
+    public static final Integer ORDER_ERR = 40011;
+    public static final Integer ORDERITEM_ERR = 40012;
+    public static final Integer SECKILL_ERR = 40013;
 
 
 }
